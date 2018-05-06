@@ -61271,9 +61271,9 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 
   var _ConfigureStore2 = _interopRequireDefault(_ConfigureStore);
 
-  var _SelectTravelDate = _require(_dependencyMap[4], "./src/module/SelectDate/SelectTravelDate");
+  var _SelectStayDate = _require(_dependencyMap[4], "./src/module/SelectDate/SelectStayDate");
 
-  var _SelectTravelDate2 = _interopRequireDefault(_SelectTravelDate);
+  var _SelectStayDate2 = _interopRequireDefault(_SelectStayDate);
 
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -61300,7 +61300,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
             lineNumber: 14
           }
         },
-        _react2.default.createElement(_SelectTravelDate2.default, {
+        _react2.default.createElement(_SelectStayDate2.default, {
           __source: {
             fileName: _jsxFileName,
             lineNumber: 15
@@ -61311,7 +61311,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
   };
 
   exports.default = App;
-},491,[118,12,492,514,518],"App.js");
+},491,[118,12,492,514,565],"App.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
   'use strict';
 
@@ -63143,6 +63143,12 @@ __d(function (global, _require, module, exports, _dependencyMap) {
     };
 },517,[563],"src/module/SelectDate/selectDate.reducers/SelectDateReducer.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  var USER_SELECTED_DATE = exports.USER_SELECTED_DATE = 'user_selected_date';
+},563,[],"src/constants/ActionType.js");
+__d(function (global, _require, module, exports, _dependencyMap) {
     Object.defineProperty(exports, "__esModule", {
         value: true
     });
@@ -63155,15 +63161,15 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 
     var _index2 = _interopRequireDefault(_index);
 
-    var _jsxFileName = "/Users/zishan/Projects/ReactNative/FabHotelTask/src/module/SelectDate/SelectTravelDate.js";
+    var _jsxFileName = "/Users/zishan/Projects/ReactNative/FabHotelTask/src/module/SelectDate/SelectStayDate.js";
 
     var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
     var _reactNative = _require(_dependencyMap[2], "react-native");
 
-    var _SelectTravelDateStyle = _require(_dependencyMap[3], "../SelectDate/SelectTravelDateStyle");
+    var _SelectStayDateStyle = _require(_dependencyMap[3], "../SelectDate/SelectStayDateStyle");
 
-    var _SelectTravelDateStyle2 = _interopRequireDefault(_SelectTravelDateStyle);
+    var _SelectStayDateStyle2 = _interopRequireDefault(_SelectStayDateStyle);
 
     var _AppBar = _require(_dependencyMap[4], "../../common/AppBar");
 
@@ -63182,13 +63188,13 @@ __d(function (global, _require, module, exports, _dependencyMap) {
     function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
     var _components = {
-        SelectTravelDate: {
-            displayName: "SelectTravelDate"
+        SelectStayDate: {
+            displayName: "SelectStayDate"
         }
     };
 
     var _node_modulesReactTransformHmrLibIndexJs2 = (0, _index2.default)({
-        filename: "/Users/zishan/Projects/ReactNative/FabHotelTask/src/module/SelectDate/SelectTravelDate.js",
+        filename: "/Users/zishan/Projects/ReactNative/FabHotelTask/src/module/SelectDate/SelectStayDate.js",
         components: _components,
         locals: [module],
         imports: [_react3.default]
@@ -63202,13 +63208,13 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 
     var GLOBAL_STRING = _require(_dependencyMap[7], '../../constants/String');
 
-    var SelectTravelDate = _wrapComponent("SelectTravelDate")(function (_Component) {
-        _inherits(SelectTravelDate, _Component);
+    var SelectStayDate = _wrapComponent("SelectStayDate")(function (_Component) {
+        _inherits(SelectStayDate, _Component);
 
-        function SelectTravelDate(props) {
-            _classCallCheck(this, SelectTravelDate);
+        function SelectStayDate(props) {
+            _classCallCheck(this, SelectStayDate);
 
-            var _this = _possibleConstructorReturn(this, (SelectTravelDate.__proto__ || Object.getPrototypeOf(SelectTravelDate)).call(this, props));
+            var _this = _possibleConstructorReturn(this, (SelectStayDate.__proto__ || Object.getPrototypeOf(SelectStayDate)).call(this, props));
 
             _this._showCalenderModel = function () {
                 _this.setState({
@@ -63216,91 +63222,86 @@ __d(function (global, _require, module, exports, _dependencyMap) {
                 });
             };
 
-            _this._selectedDate = function (stringdata) {};
+            _this._selectedDate = function (checkInDate, checkOutDate) {
+                _this.setState({
+                    dateTextStyle: [_this.state.dateTextStyle, {
+                        color: 'black'
+                    }],
+                    checkInCheckoutDateDisplay: new Date(checkInDate).toGMTString().slice(0, 12) + new Date(checkOutDate).toGMTString().slice(0, 12)
+                });
+            };
 
             _this.state = {
-                showModal: false
+                showModal: false,
+                checkInCheckoutDateDisplay: 'Enter Travel Dates',
+                dateTextStyle: _SelectStayDateStyle2.default.selectedDateText
             };
             return _this;
         }
 
-        _createClass(SelectTravelDate, [{
+        _createClass(SelectStayDate, [{
             key: "render",
             value: function render() {
                 return _react3.default.createElement(
                     _reactNative.View,
                     {
-                        style: _SelectTravelDateStyle2.default.container,
+                        style: _SelectStayDateStyle2.default.container,
                         __source: {
                             fileName: _jsxFileName,
-                            lineNumber: 19
+                            lineNumber: 22
                         }
                     },
                     _react3.default.createElement(_AppBar.AppBar, {
                         headerText: 'New Delhi',
                         __source: {
                             fileName: _jsxFileName,
-                            lineNumber: 21
+                            lineNumber: 24
                         }
                     }),
                     _react3.default.createElement(
                         _reactNative.TouchableOpacity,
                         {
-                            style: {
-                                height: 50,
-                                backgroundColor: 'white',
-                                margin: 15,
-                                borderRadius: 5,
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                padding: 10
-                            },
+                            style: _SelectStayDateStyle2.default.selectedDateDisplayContainer,
                             onPress: this._showCalenderModel,
                             __source: {
                                 fileName: _jsxFileName,
-                                lineNumber: 25
+                                lineNumber: 28
                             }
                         },
                         _react3.default.createElement(_reactNative.Image, {
-                            style: {
-                                height: 25,
-                                width: 25
-                            },
+                            style: _SelectStayDateStyle2.default.calenderImage,
                             source: _require(_dependencyMap[8], '../../../asests/calendar.png'),
                             __source: {
                                 fileName: _jsxFileName,
-                                lineNumber: 30
+                                lineNumber: 31
                             }
                         }),
                         _react3.default.createElement(
                             _reactNative.Text,
                             {
-                                style: {
-                                    paddingLeft: 10,
-                                    fontSize: 15
-                                },
+                                style: this.state.dateTextStyle,
                                 __source: {
                                     fileName: _jsxFileName,
-                                    lineNumber: 34
+                                    lineNumber: 35
                                 }
                             },
-                            "Enter Travel Dates"
+                            this.state.checkInCheckoutDateDisplay
                         )
                     ),
                     _react3.default.createElement(_CalenderModel2.default, {
                         modalVisible: this.state.showModal,
                         showCalenderModel: this._showCalenderModel,
-                        selectedDate: this._selectedDate,
+                        selectedDates: this._selectedDate,
                         __source: {
                             fileName: _jsxFileName,
-                            lineNumber: 39
+                            lineNumber: 40
                         }
                     })
                 );
             }
         }]);
 
-        return SelectTravelDate;
+        return SelectStayDate;
     }(_react2.Component));
 
     _mapStateToProps = function _mapStateToProps(_ref) {
@@ -63311,8 +63312,8 @@ __d(function (global, _require, module, exports, _dependencyMap) {
         };
     };
 
-    exports.default = (0, _reactRedux.connect)(_mapStateToProps, {})(SelectTravelDate);
-},518,[118,179,12,519,521,523,492,560,561],"src/module/SelectDate/SelectTravelDate.js");
+    exports.default = (0, _reactRedux.connect)(_mapStateToProps, {})(SelectStayDate);
+},565,[118,179,12,566,521,523,492,560,561],"src/module/SelectDate/SelectStayDate.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
     Object.defineProperty(exports, "__esModule", {
         value: true
@@ -63322,13 +63323,30 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 
     var GLOBAL_COLOR = _require(_dependencyMap[1], '../../constants/Colors');
 
-    exports.default = SelectTravelDateStyle = _reactNative.StyleSheet.create({
+    exports.default = SelectStayDateStyle = _reactNative.StyleSheet.create({
         container: {
             flex: 1,
             backgroundColor: GLOBAL_COLOR.BACKGROUND
+        },
+        selectedDateDisplayContainer: {
+            height: 50,
+            backgroundColor: 'white',
+            margin: 15,
+            borderRadius: 5,
+            flexDirection: 'row',
+            alignItems: 'center',
+            padding: 10
+        },
+        calenderImage: {
+            height: 25,
+            width: 25
+        },
+        selectedDateText: {
+            paddingLeft: 10,
+            fontSize: 15
         }
     });
-},519,[12,520],"src/module/SelectDate/SelectTravelDateStyle.js");
+},566,[12,520],"src/module/SelectDate/SelectStayDateStyle.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
     module.exports = {
         BACKGROUND: '#1D2649',
@@ -63431,6 +63449,10 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 
     var _SelectDateAction = _require(_dependencyMap[5], "./selectDate.actions/SelectDateAction");
 
+    var _CalenderStyle = _require(_dependencyMap[6], "../SelectDate/CalenderStyle");
+
+    var _CalenderStyle2 = _interopRequireDefault(_CalenderStyle);
+
     function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
     function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -63489,7 +63511,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 
                 _this.props.showCalenderModel();
 
-                _this.props.userSelectedDate();
+                _this.props.selectedDates(_this.state.intialDate.intialStartDate, _this.state.intialDate.intialEndDate);
             };
 
             _this._getHighlightedDate = function (startDate, endDate, userClicks) {
@@ -63501,12 +63523,8 @@ __d(function (global, _require, module, exports, _dependencyMap) {
                             selected: true,
                             disableTouchEvent: true,
                             customStyles: {
-                                container: {
-                                    backgroundColor: '#EB9572'
-                                },
-                                text: {
-                                    color: 'white'
-                                }
+                                container: _CalenderStyle2.default.container,
+                                text: _CalenderStyle2.default.whiteText
                             }
                         };
                     }
@@ -63515,24 +63533,16 @@ __d(function (global, _require, module, exports, _dependencyMap) {
                         selected: true,
                         disableTouchEvent: true,
                         customStyles: {
-                            container: {
-                                backgroundColor: '#EB9572'
-                            },
-                            text: {
-                                color: 'white'
-                            }
+                            container: _CalenderStyle2.default.container,
+                            text: _CalenderStyle2.default.whiteText
                         }
                     };
                     hdate[[_this._getSelectedDateFormatString(endDate)]] = {
                         selected: true,
                         disableTouchEvent: true,
                         customStyles: {
-                            container: {
-                                backgroundColor: '#EB9572'
-                            },
-                            text: {
-                                color: 'white'
-                            }
+                            container: _CalenderStyle2.default.container,
+                            text: _CalenderStyle2.default.whiteText
                         }
                     };
                     var inBetweenDates = new Date(startDate);
@@ -63541,9 +63551,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
                     for (var d = inBetweenDates; d < endDate; d.setDate(d.getDate() + 1)) {
                         hdate[[_this._getSelectedDateFormatString(d)]] = {
                             customStyles: {
-                                text: {
-                                    color: '#EB9572'
-                                }
+                                text: _CalenderStyle2.default.coloredText
                             }
                         };
                     }
@@ -63570,23 +63578,15 @@ __d(function (global, _require, module, exports, _dependencyMap) {
                     selected: true,
                     disableTouchEvent: true,
                     customStyles: {
-                        container: {
-                            backgroundColor: '#EB9572'
-                        },
-                        text: {
-                            color: 'white'
-                        }
+                        container: _CalenderStyle2.default.container,
+                        text: _CalenderStyle2.default.whiteText
                     }
                 }), _defineProperty(_highligtedDate, endyear + '-' + endMM + '-' + enddd, {
                     selected: true,
                     disableTouchEvent: true,
                     customStyles: {
-                        container: {
-                            backgroundColor: '#EB9572'
-                        },
-                        text: {
-                            color: 'white'
-                        }
+                        container: _CalenderStyle2.default.container,
+                        text: _CalenderStyle2.default.whiteText
                     }
                 }), _highligtedDate),
                 userSelectedDateForFirstTime: false,
@@ -63613,23 +63613,15 @@ __d(function (global, _require, module, exports, _dependencyMap) {
                                 selected: true,
                                 disableTouchEvent: true,
                                 customStyles: {
-                                    container: {
-                                        backgroundColor: '#EB9572'
-                                    },
-                                    text: {
-                                        color: 'white'
-                                    }
+                                    container: _CalenderStyle2.default.container,
+                                    text: _CalenderStyle2.default.whiteText
                                 }
                             }), _defineProperty(_this2$setState, endyear + '-' + endMM + '-' + enddd, {
                                 selected: true,
                                 disableTouchEvent: true,
                                 customStyles: {
-                                    container: {
-                                        backgroundColor: '#EB9572'
-                                    },
-                                    text: {
-                                        color: 'white'
-                                    }
+                                    container: _CalenderStyle2.default.container,
+                                    text: _CalenderStyle2.default.whiteText
                                 }
                             }), _this2$setState));
 
@@ -63637,34 +63629,25 @@ __d(function (global, _require, module, exports, _dependencyMap) {
                         },
                         __source: {
                             fileName: _jsxFileName,
-                            lineNumber: 67
+                            lineNumber: 58
                         }
                     },
                     _react3.default.createElement(
                         _reactNative.View,
                         {
-                            style: {
-                                flex: 1,
-                                backgroundColor: '#252525CC',
-                                justifyContent: 'center'
-                            },
+                            style: _CalenderStyle2.default.calenderModelContainer,
                             __source: {
                                 fileName: _jsxFileName,
-                                lineNumber: 98
+                                lineNumber: 80
                             }
                         },
                         _react3.default.createElement(_reactNativeCalendars.Calendar, {
-                            style: {
-                                borderWidth: 1,
-                                borderColor: 'gray',
-                                marginHorizontal: 40,
-                                height: 410
-                            },
+                            style: _CalenderStyle2.default.calenderStyle,
                             markingType: 'custom',
                             theme: {
                                 backgroundColor: '#ffffff',
                                 calendarBackground: '#ffffff',
-                                textSectionTitleColor: '#b6c1cd',
+                                textSectionTitleColor: '#828282',
                                 selectedDayBackgroundColor: '#00adf5',
                                 selectedDayTextColor: 'white',
                                 todayTextColor: 'black',
@@ -63672,9 +63655,9 @@ __d(function (global, _require, module, exports, _dependencyMap) {
                                 textDisabledColor: '#d9e1e8',
                                 arrowColor: 'black',
                                 monthTextColor: '#797979',
-                                textDayFontFamily: 'monospace',
+                                textDayFontFamily: 'bold',
                                 textMonthFontFamily: 'bold',
-                                textDayHeaderFontFamily: 'monospace',
+                                textDayHeaderFontFamily: 'bold',
                                 textMonthFontWeight: 'bold',
                                 textDayFontSize: 16,
                                 textMonthFontSize: 16,
@@ -63692,20 +63675,24 @@ __d(function (global, _require, module, exports, _dependencyMap) {
                                     _this2._getHighlightedDate(new Date(day.timestamp), secondDate, userClicks);
 
                                     _this2.setState({
-                                        disableDate: day.dateString
+                                        disableDate: day.dateString,
+                                        intialDate: {
+                                            intialStartDate: checkInDate,
+                                            intialEndDate: secondDate
+                                        }
                                     });
                                 } else {
                                     userClicks = 2;
 
+                                    _this2.setState({
+                                        intialDate: {
+                                            intialStartDate: checkInDate,
+                                            intialEndDate: new Date(day.timestamp)
+                                        }
+                                    });
+
                                     _this2._getHighlightedDate(checkInDate, new Date(day.timestamp), userClicks);
                                 }
-
-                                _this2.setState({
-                                    intialDate: {
-                                        intialStartDate: checkInDate,
-                                        intialEndDate: new Date(day.timestamp)
-                                    }
-                                });
                             },
                             startDateToShow: this.state.intialDate.intialStartDate,
                             endDateToShow: this.state.intialDate.intialEndDate,
@@ -63720,7 +63707,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
                             firstDay: 0,
                             __source: {
                                 fileName: _jsxFileName,
-                                lineNumber: 103
+                                lineNumber: 83
                             }
                         })
                     )
@@ -63767,7 +63754,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
     exports.default = (0, _reactRedux.connect)(null, {
         userSelectedDate: _SelectDateAction.userSelectedDate
     })(CalenderModel);
-},523,[118,179,12,524,492,564],"src/module/SelectDate/CalenderModel.js");
+},523,[118,179,12,524,492,564,567],"src/module/SelectDate/CalenderModel.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -70542,6 +70529,53 @@ __d(function (global, _require, module, exports, _dependencyMap) {
   }();
 },559,[],"node_modules/react-native-calendars/src/input.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
+    Object.defineProperty(exports, "__esModule", {
+        value: true
+    });
+    exports.userSelectedDate = undefined;
+
+    var _ActionType = _require(_dependencyMap[0], "../../../constants/ActionType");
+
+    var userSelectedDate = exports.userSelectedDate = function userSelectedDate() {
+        return {
+            type: _ActionType.USER_SELECTED_DATE,
+            payload: 'date'
+        };
+    };
+},564,[563],"src/module/SelectDate/selectDate.actions/SelectDateAction.js");
+__d(function (global, _require, module, exports, _dependencyMap) {
+    Object.defineProperty(exports, "__esModule", {
+        value: true
+    });
+
+    var _reactNative = _require(_dependencyMap[0], "react-native");
+
+    var GLOBAL_COLOR = _require(_dependencyMap[1], '../../constants/Colors');
+
+    exports.default = CalenderStyle = _reactNative.StyleSheet.create({
+        calenderModelContainer: {
+            flex: 1,
+            backgroundColor: '#252525CC',
+            justifyContent: 'center'
+        },
+        calenderStyle: {
+            borderWidth: 1,
+            borderColor: 'gray',
+            marginHorizontal: 40,
+            height: 410
+        },
+        container: {
+            backgroundColor: '#EB9572'
+        },
+        whiteText: {
+            color: 'white'
+        },
+        coloredText: {
+            color: '#EB9572'
+        }
+    });
+},567,[12,520],"src/module/SelectDate/CalenderStyle.js");
+__d(function (global, _require, module, exports, _dependencyMap) {
     module.exports = {
         APP_NAME: 'Weather News'
     };
@@ -70558,27 +70592,6 @@ __d(function (global, _require, module, exports, _dependencyMap) {
     "type": "png"
   });
 },561,[164],"asests/calendar.png");
-__d(function (global, _require, module, exports, _dependencyMap) {
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  var USER_SELECTED_DATE = exports.USER_SELECTED_DATE = 'user_selected_date';
-},563,[],"src/constants/ActionType.js");
-__d(function (global, _require, module, exports, _dependencyMap) {
-    Object.defineProperty(exports, "__esModule", {
-        value: true
-    });
-    exports.userSelectedDate = undefined;
-
-    var _ActionType = _require(_dependencyMap[0], "../../../constants/ActionType");
-
-    var userSelectedDate = exports.userSelectedDate = function userSelectedDate() {
-        return {
-            type: _ActionType.USER_SELECTED_DATE,
-            payload: 'date'
-        };
-    };
-},564,[563],"src/module/SelectDate/selectDate.actions/SelectDateAction.js");
 require(44);
 require(11);
 //# sourceMappingURL=index.map

@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { View, Text, Modal, Image, TouchableWithoutFeedback } from 'react-native';
-import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
+import { Calendar } from 'react-native-calendars';
 import { connect } from 'react-redux';
 import { userSelectedDate } from './selectDate.actions/SelectDateAction';
+import CalenderStyle from '../SelectDate/CalenderStyle';
 
 
 var startDate = new Date();
@@ -12,7 +13,6 @@ var year = startDate.getFullYear();
 
 
 var endDate = new Date(startDate);
-//var endDate = new Date();
 endDate.setDate(startDate.getDate() + 1)
 var enddd = (endDate.getDate() < 10 ? '0' : '') + endDate.getDate();
 var endMM = ((endDate.getMonth() + 1) < 10 ? '0' : '') + (endDate.getMonth() + 1);
@@ -36,28 +36,18 @@ class CalenderModel extends Component {
             highligtedDate: {
                 [year + '-' + MM + '-' + dd]: {
                     selected: true, disableTouchEvent: true, customStyles: {
-                        container: {
-                            backgroundColor: '#EB9572',
-                        },
-                        text: {
-                            color: 'white',
-                        },
+                        container: CalenderStyle.container,
+                        text: CalenderStyle.whiteText
                     },
                 },
                 [endyear + '-' + endMM + '-' + enddd]: {
                     selected: true, disableTouchEvent: true, customStyles: {
-                        container: {
-                            backgroundColor: '#EB9572',
-                        },
-                        text: {
-                            color: 'white',
-                        },
+                        container: CalenderStyle.container,
+                        text: CalenderStyle.whiteText
                     },
                 }
             },
-
             userSelectedDateForFirstTime: false,
-
             disableDate: year + '-' + MM + '-' + dd
         };
     }
@@ -72,49 +62,30 @@ class CalenderModel extends Component {
                     this.setState({
                         [year + '-' + MM + '-' + dd]: {
                             selected: true, disableTouchEvent: true, customStyles: {
-                                container: {
-                                    backgroundColor: '#EB9572',
-                                },
-                                text: {
-                                    color: 'white',
-                                },
+                                container: CalenderStyle.container,
+                                text: CalenderStyle.whiteText
                             },
                         },
                         [endyear + '-' + endMM + '-' + enddd]: {
                             selected: true, disableTouchEvent: true, customStyles: {
-                                container: {
-                                    backgroundColor: '#EB9572',
-                                },
-                                text: {
-                                    color: 'white',
-                                },
+                                container: CalenderStyle.container,
+                                text: CalenderStyle.whiteText
                             },
                         }
                     });
                     this.props.showCalenderModel();
-                }}
-            >
-
-                <View style={{
-                    flex: 1, backgroundColor: '#252525CC', justifyContent: 'center',
                 }}>
+
+                <View style={CalenderStyle.calenderModelContainer}>
 
 
                     <Calendar
-
-                        // Specify style for calendar container element. Default = {}
-                        style={{
-                            borderWidth: 1,
-                            borderColor: 'gray',
-                            marginHorizontal: 40,
-                            height: 410,
-                        }}
+                        style={CalenderStyle.calenderStyle}
                         markingType={'custom'}
-                        // Specify theme properties to override specific styles for calendar parts. Default = {}
                         theme={{
                             backgroundColor: '#ffffff',
                             calendarBackground: '#ffffff',
-                            textSectionTitleColor: '#b6c1cd',
+                            textSectionTitleColor: '#828282',
                             selectedDayBackgroundColor: '#00adf5',
                             selectedDayTextColor: 'white',
                             todayTextColor: 'black',
@@ -122,24 +93,17 @@ class CalenderModel extends Component {
                             textDisabledColor: '#d9e1e8',
                             arrowColor: 'black',
                             monthTextColor: '#797979',
-                            textDayFontFamily: 'monospace',
+                            textDayFontFamily: 'bold',
                             textMonthFontFamily: 'bold',
-                            textDayHeaderFontFamily: 'monospace',
+                            textDayHeaderFontFamily: 'bold',
                             textMonthFontWeight: 'bold',
                             textDayFontSize: 16,
                             textMonthFontSize: 16,
                             textDayHeaderFontSize: 16
                         }}
-
-                        // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
                         minDate={this.state.disableDate}
-
-                        // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined
                         maxDate={(year + 1) + '-' + MM + '-' + dd}
-
-                        // Handler which gets executed on day press. Default = undefined
                         onDayPress={(day) => {
-
                             if (userClicks === 0) {
                                 userClicks = userClicks + 1;
                                 checkInDate = new Date(day.timestamp);
@@ -147,39 +111,35 @@ class CalenderModel extends Component {
                                 secondDate.setDate(checkInDate.getDate() + 1);
                                 this._getHighlightedDate(new Date(day.timestamp), secondDate, userClicks);
 
-                                this.setState({ disableDate: day.dateString });
+                                this.setState({
+                                    disableDate: day.dateString, intialDate: {
+                                        intialStartDate: checkInDate,
+                                        intialEndDate: secondDate
+                                    }
+                                });
                             } else {
                                 userClicks = 2;
+                                this.setState({
+                                    intialDate: {
+                                        intialStartDate: checkInDate,
+                                        intialEndDate: new Date(day.timestamp)
+                                    }
+                                });
                                 this._getHighlightedDate(checkInDate, new Date(day.timestamp), userClicks);
                             }
-
-                            this.setState({
-                                intialDate: {
-                                    intialStartDate: checkInDate,
-                                    intialEndDate: new Date(day.timestamp)
-                                }
-                            });
-
                         }}
 
                         startDateToShow={this.state.intialDate.intialStartDate}
                         endDateToShow={this.state.intialDate.intialEndDate}
-
                         markedDates={
                             this.state.highligtedDate
                         }
-
                         onCancel={() => this._onCancel()}
-
                         onDone={() => this._onDone()}
-
                         monthFormat={'MMM yyyy '}
-
                         firstDay={0}
                     />
-
                 </View>
-
             </Modal>
         );
     }
@@ -215,7 +175,7 @@ class CalenderModel extends Component {
     _onDone = () => {
         this.setState({ userSelectedDateForFirstTime: true })
         this.props.showCalenderModel();
-        this.props.userSelectedDate();
+        this.props.selectedDates(this.state.intialDate.intialStartDate, this.state.intialDate.intialEndDate);
     }
 
     _getHighlightedDate = (startDate, endDate, userClicks) => {
@@ -224,34 +184,22 @@ class CalenderModel extends Component {
             for (var d = startDate; d <= endDate; d.setDate(d.getDate() + 1)) {
                 hdate[[this._getSelectedDateFormatString(d)]] = {
                     selected: true, disableTouchEvent: true, customStyles: {
-                        container: {
-                            backgroundColor: '#EB9572',
-                        },
-                        text: {
-                            color: 'white',
-                        },
+                        container: CalenderStyle.container,
+                        text: CalenderStyle.whiteText
                     },
                 }
             }
         } else {
             hdate[[this._getSelectedDateFormatString(startDate)]] = {
                 selected: true, disableTouchEvent: true, customStyles: {
-                    container: {
-                        backgroundColor: '#EB9572',
-                    },
-                    text: {
-                        color: 'white',
-                    },
+                    container: CalenderStyle.container,
+                    text: CalenderStyle.whiteText
                 },
             }
             hdate[[this._getSelectedDateFormatString(endDate)]] = {
                 selected: true, disableTouchEvent: true, customStyles: {
-                    container: {
-                        backgroundColor: '#EB9572',
-                    },
-                    text: {
-                        color: 'white',
-                    },
+                    container: CalenderStyle.container,
+                    text: CalenderStyle.whiteText
                 },
             }
 
@@ -260,9 +208,7 @@ class CalenderModel extends Component {
             for (var d = inBetweenDates; d < endDate; d.setDate(d.getDate() + 1)) {
                 hdate[[this._getSelectedDateFormatString(d)]] = {
                     customStyles: {
-                        text: {
-                            color: '#EB9572',
-                        },
+                        text: CalenderStyle.coloredText
                     },
                 }
             }
