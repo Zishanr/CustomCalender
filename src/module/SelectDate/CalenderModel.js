@@ -6,20 +6,20 @@ import { userSelectedDate } from './selectDate.actions/SelectDateAction';
 import CalenderStyle from '../SelectDate/CalenderStyle';
 
 
-var startDate = new Date();
-var dd = (startDate.getDate() < 10 ? '0' : '') + startDate.getDate();
-var MM = ((startDate.getMonth() + 1) < 10 ? '0' : '') + (startDate.getMonth() + 1);
-var year = startDate.getFullYear();
+let startDate = new Date();
+let dd = (startDate.getDate() < 10 ? '0' : '') + startDate.getDate();
+let MM = ((startDate.getMonth() + 1) < 10 ? '0' : '') + (startDate.getMonth() + 1);
+let year = startDate.getFullYear();
 
 
-var endDate = new Date(startDate);
+let endDate = new Date(startDate);
 endDate.setDate(startDate.getDate() + 1)
-var enddd = (endDate.getDate() < 10 ? '0' : '') + endDate.getDate();
-var endMM = ((endDate.getMonth() + 1) < 10 ? '0' : '') + (endDate.getMonth() + 1);
-var endyear = endDate.getFullYear();
+let enddd = (endDate.getDate() < 10 ? '0' : '') + endDate.getDate();
+let endMM = ((endDate.getMonth() + 1) < 10 ? '0' : '') + (endDate.getMonth() + 1);
+let endyear = endDate.getFullYear();
 
-var userClicks = 0;
-var checkInDate;
+let userGesture = 0;
+let checkInDate;
 
 
 class CalenderModel extends Component {
@@ -106,60 +106,7 @@ class CalenderModel extends Component {
                         maxDate={(year + 1) + '-' + MM + '-' + dd}
 
                         onDayPress={(day) => {
-
-                            if (userClicks === 0) {
-                                userClicks = userClicks + 1;
-                                checkInDate = new Date(day.timestamp);
-                                var secondDate = new Date(checkInDate);
-                                secondDate.setDate(checkInDate.getDate() + 1);
-                                this._getHighlightedDate(new Date(day.timestamp), secondDate, userClicks);
-
-                                this.setState({
-                                    disableDate: day.dateString,
-                                    intialDate: {
-                                        intialStartDate: checkInDate,
-                                        intialEndDate: secondDate
-                                    },
-                                    checkInHighlighted: false
-                                });
-                            } else if (this.state.checkInHighlighted && userClicks > 0) {
-
-                                if (this.state.intialDate.intialStartDate > new Date(day.timestamp)) {
-                                    checkInDate = new Date(day.timestamp);
-                                    userClicks = 2;
-                                    this.setState({
-                                        intialDate: {
-                                            intialStartDate: new Date(day.timestamp),
-                                            intialEndDate: this.state.intialDate.intialEndDate
-                                        }
-                                    });
-                                    this._getHighlightedDate(new Date(day.timestamp), this.state.intialDate.intialEndDate, userClicks);
-                                } else {
-                                    userClicks = 1;
-                                    var date = new Date(day.timestamp);
-                                    var nextDate = new Date();
-                                    nextDate.setDate(date.getDate() + 1);
-                                    checkInDate = new Date(date);
-                                    this.setState({
-                                        checkInHighlighted: false,
-                                        intialDate: {
-                                            intialStartDate: new Date(day.timestamp),
-                                            intialEndDate: nextDate,
-                                        },
-                                        disableDate: date.getFullYear() + '-' + ((date.getMonth() + 1) < 10 ? '0' : '') + (date.getMonth() + 1) + '-' + (date.getDate() < 10 ? '0' : '') + date.getDate()
-                                    });
-                                    this._getHighlightedDate(date, nextDate, userClicks);
-                                }
-                            } else {
-                                userClicks = 2;
-                                this.setState({
-                                    intialDate: {
-                                        intialStartDate: checkInDate,
-                                        intialEndDate: new Date(day.timestamp)
-                                    }
-                                });
-                                this._getHighlightedDate(checkInDate, new Date(day.timestamp), userClicks);
-                            }
+                            this._onCalenderDayPressed(day);
                         }}
 
                         startDateToShow={this.state.intialDate.intialStartDate}
@@ -179,6 +126,62 @@ class CalenderModel extends Component {
         );
     }
 
+    _onCalenderDayPressed = (day) => {
+        if (userGesture === 0) {
+            userGesture = userGesture + 1;
+            checkInDate = new Date(day.timestamp);
+            let secondDate = new Date(checkInDate);
+            secondDate.setDate(checkInDate.getDate() + 1);
+            this._getHighlightedDate(new Date(day.timestamp), secondDate, userGesture);
+
+            this.setState({
+                disableDate: day.dateString,
+                intialDate: {
+                    intialStartDate: checkInDate,
+                    intialEndDate: secondDate
+                },
+                checkInHighlighted: false
+            });
+        } else if (this.state.checkInHighlighted && userGesture > 0) {
+
+            if (this.state.intialDate.intialStartDate > new Date(day.timestamp)) {
+                checkInDate = new Date(day.timestamp);
+                userGesture = 2;
+                this.setState({
+                    intialDate: {
+                        intialStartDate: new Date(day.timestamp),
+                        intialEndDate: this.state.intialDate.intialEndDate
+                    }
+                });
+                this._getHighlightedDate(new Date(day.timestamp), this.state.intialDate.intialEndDate, userGesture);
+            } else {
+                userGesture = 1;
+                let date = new Date(day.timestamp);
+                let nextDate = new Date();
+                nextDate.setDate(date.getDate() + 1);
+                checkInDate = new Date(date);
+                this.setState({
+                    checkInHighlighted: false,
+                    intialDate: {
+                        intialStartDate: new Date(day.timestamp),
+                        intialEndDate: nextDate,
+                    },
+                    disableDate: date.getFullYear() + '-' + ((date.getMonth() + 1) < 10 ? '0' : '') + (date.getMonth() + 1) + '-' + (date.getDate() < 10 ? '0' : '') + date.getDate()
+                });
+                this._getHighlightedDate(date, nextDate, userGesture);
+            }
+        } else {
+            userGesture = 2;
+            this.setState({
+                intialDate: {
+                    intialStartDate: checkInDate,
+                    intialEndDate: new Date(day.timestamp)
+                }
+            });
+            this._getHighlightedDate(checkInDate, new Date(day.timestamp), userGesture);
+        }
+    }
+
     _onCheckInHeaderDateClicked = () => {
         this.setState({
             checkInHighlighted: true,
@@ -192,7 +195,7 @@ class CalenderModel extends Component {
 
     _onCancel() {
         if (!this.state.userSelectedDateForFirstTime) {
-            userClicks = 0;
+            userGesture = 0;
             this.setState({
                 highligtedDate: {
                     [year + '-' + MM + '-' + dd]: {
@@ -220,8 +223,8 @@ class CalenderModel extends Component {
         this.props.selectedDates(this.state.intialDate.intialStartDate, this.state.intialDate.intialEndDate);
     }
 
-    _getHighlightedDate = (startDate, endDate, userClicks) => {
-        var hdate = {}
+    _getHighlightedDate = (startDate, endDate, userGesture) => {
+        let hdate = {}
         let swapvar;
 
         if (startDate > endDate) {
@@ -230,9 +233,8 @@ class CalenderModel extends Component {
             endDate = swapvar;
         }
 
-        if (userClicks === 1) {
-            for (var d = startDate; d <= endDate; d.setDate(d.getDate() + 1)) {
-                console.log('checkindate', checkInDate);
+        if (userGesture === 1) {
+            for (let d = startDate; d <= endDate; d.setDate(d.getDate() + 1)) {
                 hdate[[this._getSelectedDateFormatString(d)]] = {
                     selected: true, disableTouchEvent: true, customStyles: {
                         container: CalenderStyle.container,
@@ -254,9 +256,9 @@ class CalenderModel extends Component {
                 },
             }
 
-            var inBetweenDates = new Date(startDate);
+            let inBetweenDates = new Date(startDate);
             inBetweenDates.setDate(inBetweenDates.getDate() + 1);
-            for (var d = inBetweenDates; d < endDate; d.setDate(d.getDate() + 1)) {
+            for (let d = inBetweenDates; d < endDate; d.setDate(d.getDate() + 1)) {
                 hdate[[this._getSelectedDateFormatString(d)]] = {
                     customStyles: {
                         text: CalenderStyle.coloredText
@@ -269,9 +271,9 @@ class CalenderModel extends Component {
     }
 
     _getSelectedDateFormatString = (selectedDate) => {
-        var hDD = (selectedDate.getDate() < 10 ? '0' : '') + selectedDate.getDate();
-        var hMM = ((selectedDate.getMonth() + 1) < 10 ? '0' : '') + (selectedDate.getMonth() + 1);
-        var hYY = selectedDate.getFullYear();
+        let hDD = (selectedDate.getDate() < 10 ? '0' : '') + selectedDate.getDate();
+        let hMM = ((selectedDate.getMonth() + 1) < 10 ? '0' : '') + (selectedDate.getMonth() + 1);
+        let hYY = selectedDate.getFullYear();
 
         return (hYY + '-' + hMM + '-' + hDD);
     }

@@ -24,5 +24,9 @@ export default SelectStayDateStyle = StyleSheet.create({
     selectedDateText: {
         paddingLeft: 10,
         fontSize: 15
+    },
+    checkInCheckOutDate : {
+        color: 'black', 
+        fontWeight: 'bold'
     }
 });

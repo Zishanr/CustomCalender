@@ -51,7 +51,7 @@ class SelectStayDate extends Component {
     }
 
     _selectedDate = (checkInDate, checkOutDate) => {
-        this.setState({ dateTextStyle : [this.state.dateTextStyle, {color : 'black', fontWeight: 'bold',}], checkInCheckoutDateDisplay: new Date(checkInDate).toGMTString().slice(5, 16) + ' - ' + new Date(checkOutDate).toGMTString().slice(5, 16) });
+        this.setState({ dateTextStyle: [this.state.dateTextStyle, SelectStayDateStyle.checkInCheckOutDate], checkInCheckoutDateDisplay: new Date(checkInDate).toGMTString().slice(5, 16) + ' - ' + new Date(checkOutDate).toGMTString().slice(5, 16) });
     }
 }
 
