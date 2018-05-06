@@ -48,7 +48,8 @@ class CalenderModel extends Component {
                 }
             },
             userSelectedDateForFirstTime: false,
-            disableDate: year + '-' + MM + '-' + dd
+            disableDate: year + '-' + MM + '-' + dd,
+            checkInHighlighted: true
         };
     }
 
@@ -103,7 +104,9 @@ class CalenderModel extends Component {
                         }}
                         minDate={this.state.disableDate}
                         maxDate={(year + 1) + '-' + MM + '-' + dd}
+
                         onDayPress={(day) => {
+
                             if (userClicks === 0) {
                                 userClicks = userClicks + 1;
                                 checkInDate = new Date(day.timestamp);
@@ -116,8 +119,37 @@ class CalenderModel extends Component {
                                     intialDate: {
                                         intialStartDate: checkInDate,
                                         intialEndDate: secondDate
-                                    }
+                                    },
+                                    checkInHighlighted: false
                                 });
+                            } else if (this.state.checkInHighlighted && userClicks > 0) {
+
+                                if (this.state.intialDate.intialStartDate > new Date(day.timestamp)) {
+                                    checkInDate = new Date(day.timestamp);
+                                    userClicks = 2;
+                                    this.setState({
+                                        intialDate: {
+                                            intialStartDate: new Date(day.timestamp),
+                                            intialEndDate: this.state.intialDate.intialEndDate
+                                        }
+                                    });
+                                    this._getHighlightedDate(new Date(day.timestamp), this.state.intialDate.intialEndDate, userClicks);
+                                } else {
+                                    userClicks = 1;
+                                    var date = new Date(day.timestamp);
+                                    var nextDate = new Date();
+                                    nextDate.setDate(date.getDate() + 1);
+                                    checkInDate = new Date(date);
+                                    this.setState({
+                                        checkInHighlighted: false,
+                                        intialDate: {
+                                            intialStartDate: new Date(day.timestamp),
+                                            intialEndDate: nextDate,
+                                        },
+                                        disableDate: date.getFullYear() + '-' + ((date.getMonth() + 1) < 10 ? '0' : '') + (date.getMonth() + 1) + '-' + (date.getDate() < 10 ? '0' : '') + date.getDate()
+                                    });
+                                    this._getHighlightedDate(date, nextDate, userClicks);
+                                }
                             } else {
                                 userClicks = 2;
                                 this.setState({
@@ -149,6 +181,7 @@ class CalenderModel extends Component {
 
     _onCheckInHeaderDateClicked = () => {
         this.setState({
+            checkInHighlighted: true,
             disableDate: year + '-' + MM + '-' + dd
         })
     }
@@ -189,8 +222,17 @@ class CalenderModel extends Component {
 
     _getHighlightedDate = (startDate, endDate, userClicks) => {
         var hdate = {}
+        let swapvar;
+
+        if (startDate > endDate) {
+            swapvar = startDate;
+            startDate = endDate;
+            endDate = swapvar;
+        }
+
         if (userClicks === 1) {
             for (var d = startDate; d <= endDate; d.setDate(d.getDate() + 1)) {
+                console.log('checkindate', checkInDate);
                 hdate[[this._getSelectedDateFormatString(d)]] = {
                     selected: true, disableTouchEvent: true, customStyles: {
                         container: CalenderStyle.container,
