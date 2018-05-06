@@ -3,7 +3,6 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import SelectStayDateStyle from '../SelectDate/SelectStayDateStyle';
 import { AppBar } from '../../common/AppBar';
 import CalenderModel from './CalenderModel';
-import { connect } from 'react-redux';
 
 const GLOBAL_STRING = require('../../constants/String');
 
@@ -55,9 +54,4 @@ class SelectStayDate extends Component {
     }
 }
 
-_mapStateToProps = ({ selectDateReducer }) => {
-    const { date } = selectDateReducer;
-    return { date };
-}
-
-export default connect(_mapStateToProps, {})(SelectStayDate);
+export default SelectStayDate;

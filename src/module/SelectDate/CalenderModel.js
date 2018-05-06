@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, Modal, Image, TouchableWithoutFeedback } from 'react-native';
 import { Calendar } from 'react-native-calendars';
-import { connect } from 'react-redux';
-import { userSelectedDate } from './selectDate.actions/SelectDateAction';
 import CalenderStyle from '../SelectDate/CalenderStyle';
 
 
@@ -280,4 +278,4 @@ class CalenderModel extends Component {
 
 }
 
-export default connect(null, { userSelectedDate })(CalenderModel);
+export default CalenderModel;
