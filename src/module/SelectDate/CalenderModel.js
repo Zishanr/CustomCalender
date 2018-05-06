@@ -48,7 +48,8 @@ class CalenderModel extends Component {
                 }
             },
             userSelectedDateForFirstTime: false,
-            disableDate: year + '-' + MM + '-' + dd
+            disableDate: year + '-' + MM + '-' + dd,
+            checkInHeader : false
         };
     }
 
@@ -112,7 +113,8 @@ class CalenderModel extends Component {
                                 this._getHighlightedDate(new Date(day.timestamp), secondDate, userClicks);
 
                                 this.setState({
-                                    disableDate: day.dateString, intialDate: {
+                                    disableDate: day.dateString,
+                                    intialDate: {
                                         intialStartDate: checkInDate,
                                         intialEndDate: secondDate
                                     }
@@ -138,35 +140,43 @@ class CalenderModel extends Component {
                         onDone={() => this._onDone()}
                         monthFormat={'MMM yyyy '}
                         firstDay={0}
+                        onCheckInHeaderDateClicked={this._onCheckInHeaderDateClicked}
+                        onCheckOutHeaderDateClicked={this._onCheckOutHeaderDateClicked}
                     />
                 </View>
             </Modal>
         );
     }
 
+    _onCheckInHeaderDateClicked = () => {
+        this.setState({
+            disableDate: year + '-' + MM + '-' + dd
+        })
+    }
+
+    _onCheckOutHeaderDateClicked = () => {
+
+    }
+
     _onCancel() {
         if (!this.state.userSelectedDateForFirstTime) {
+            userClicks = 0;
             this.setState({
-                [year + '-' + MM + '-' + dd]: {
-                    selected: true, disableTouchEvent: true, customStyles: {
-                        container: {
-                            backgroundColor: '#EB9572',
-                        },
-                        text: {
-                            color: 'white',
+                highligtedDate: {
+                    [year + '-' + MM + '-' + dd]: {
+                        selected: true, disableTouchEvent: true, customStyles: {
+                            container: CalenderStyle.container,
+                            text: CalenderStyle.whiteText
                         },
                     },
+                    [endyear + '-' + endMM + '-' + enddd]: {
+                        selected: true, disableTouchEvent: true, customStyles: {
+                            container: CalenderStyle.container,
+                            text: CalenderStyle.whiteText
+                        },
+                    }
                 },
-                [endyear + '-' + endMM + '-' + enddd]: {
-                    selected: true, disableTouchEvent: true, customStyles: {
-                        container: {
-                            backgroundColor: '#EB9572',
-                        },
-                        text: {
-                            color: 'white',
-                        },
-                    },
-                }
+                disableDate: year + '-' + MM + '-' + dd
             });
         }
         this.props.showCalenderModel();

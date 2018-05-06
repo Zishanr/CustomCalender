@@ -63225,9 +63225,10 @@ __d(function (global, _require, module, exports, _dependencyMap) {
             _this._selectedDate = function (checkInDate, checkOutDate) {
                 _this.setState({
                     dateTextStyle: [_this.state.dateTextStyle, {
-                        color: 'black'
+                        color: 'black',
+                        fontWeight: 'bold'
                     }],
-                    checkInCheckoutDateDisplay: new Date(checkInDate).toGMTString().slice(0, 12) + new Date(checkOutDate).toGMTString().slice(0, 12)
+                    checkInCheckoutDateDisplay: new Date(checkInDate).toGMTString().slice(5, 16) + ' - ' + new Date(checkOutDate).toGMTString().slice(5, 16)
                 });
             };
 
@@ -63504,6 +63505,14 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 
             var _this = _possibleConstructorReturn(this, (CalenderModel.__proto__ || Object.getPrototypeOf(CalenderModel)).call(this, props));
 
+            _this._onCheckInHeaderDateClicked = function () {
+                _this.setState({
+                    disableDate: year + '-' + MM + '-' + dd
+                });
+            };
+
+            _this._onCheckOutHeaderDateClicked = function () {};
+
             _this._onDone = function () {
                 _this.setState({
                     userSelectedDateForFirstTime: true
@@ -63590,7 +63599,8 @@ __d(function (global, _require, module, exports, _dependencyMap) {
                     }
                 }), _highligtedDate),
                 userSelectedDateForFirstTime: false,
-                disableDate: year + '-' + MM + '-' + dd
+                disableDate: year + '-' + MM + '-' + dd,
+                checkInHeader: false
             };
             return _this;
         }
@@ -63705,6 +63715,8 @@ __d(function (global, _require, module, exports, _dependencyMap) {
                             },
                             monthFormat: 'MMM yyyy ',
                             firstDay: 0,
+                            onCheckInHeaderDateClicked: this._onCheckInHeaderDateClicked,
+                            onCheckOutHeaderDateClicked: this._onCheckOutHeaderDateClicked,
                             __source: {
                                 fileName: _jsxFileName,
                                 lineNumber: 83
@@ -63717,31 +63729,27 @@ __d(function (global, _require, module, exports, _dependencyMap) {
             key: "_onCancel",
             value: function _onCancel() {
                 if (!this.state.userSelectedDateForFirstTime) {
-                    var _setState;
+                    var _highligtedDate2;
 
-                    this.setState((_setState = {}, _defineProperty(_setState, year + '-' + MM + '-' + dd, {
-                        selected: true,
-                        disableTouchEvent: true,
-                        customStyles: {
-                            container: {
-                                backgroundColor: '#EB9572'
-                            },
-                            text: {
-                                color: 'white'
+                    userClicks = 0;
+                    this.setState({
+                        highligtedDate: (_highligtedDate2 = {}, _defineProperty(_highligtedDate2, year + '-' + MM + '-' + dd, {
+                            selected: true,
+                            disableTouchEvent: true,
+                            customStyles: {
+                                container: _CalenderStyle2.default.container,
+                                text: _CalenderStyle2.default.whiteText
                             }
-                        }
-                    }), _defineProperty(_setState, endyear + '-' + endMM + '-' + enddd, {
-                        selected: true,
-                        disableTouchEvent: true,
-                        customStyles: {
-                            container: {
-                                backgroundColor: '#EB9572'
-                            },
-                            text: {
-                                color: 'white'
+                        }), _defineProperty(_highligtedDate2, endyear + '-' + endMM + '-' + enddd, {
+                            selected: true,
+                            disableTouchEvent: true,
+                            customStyles: {
+                                container: _CalenderStyle2.default.container,
+                                text: _CalenderStyle2.default.whiteText
                             }
-                        }
-                    }), _setState));
+                        }), _highligtedDate2),
+                        disableDate: year + '-' + MM + '-' + dd
+                    });
                 }
 
                 this.props.showCalenderModel();
@@ -64021,7 +64029,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
               },
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 175
+                lineNumber: 176
               }
             });
           } else {
@@ -64030,7 +64038,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
               style: this.style.dayContainer,
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 177
+                lineNumber: 178
               }
             });
           }
@@ -64049,7 +64057,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
               marking: this.getDateMarking(day),
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 183
+                lineNumber: 184
               }
             },
             date
@@ -64111,7 +64119,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
             state: "disabled",
             __source: {
               fileName: _jsxFileName,
-              lineNumber: 231
+              lineNumber: 232
             }
           },
           weekNumber
@@ -64138,7 +64146,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
             key: id,
             __source: {
               fileName: _jsxFileName,
-              lineNumber: 244
+              lineNumber: 245
             }
           },
           week
@@ -64171,7 +64179,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
           {
             __source: {
               fileName: _jsxFileName,
-              lineNumber: 264
+              lineNumber: 265
             }
           },
           _react3.default.createElement(
@@ -64180,50 +64188,60 @@ __d(function (global, _require, module, exports, _dependencyMap) {
               style: this.style.customHeaderStyle,
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 265
+                lineNumber: 266
               }
             },
             _react3.default.createElement(
-              _reactNative.View,
+              _reactNative.TouchableWithoutFeedback,
               {
-                style: {
-                  flex: 1,
-                  justifyContent: 'center',
-                  paddingLeft: 10
-                },
+                onPress: this.props.onCheckInHeaderDateClicked,
                 __source: {
                   fileName: _jsxFileName,
-                  lineNumber: 267
+                  lineNumber: 268
                 }
               },
               _react3.default.createElement(
-                _reactNative.Text,
+                _reactNative.View,
                 {
                   style: {
-                    color: 'white',
-                    fontSize: 15,
-                    alignSelf: 'flex-start'
-                  },
-                  __source: {
-                    fileName: _jsxFileName,
-                    lineNumber: 268
-                  }
-                },
-                "Check In"
-              ),
-              _react3.default.createElement(
-                _reactNative.Text,
-                {
-                  style: {
-                    color: 'white',
-                    fontSize: 18
+                    flex: 1,
+                    justifyContent: 'center',
+                    paddingLeft: 10
                   },
                   __source: {
                     fileName: _jsxFileName,
                     lineNumber: 269
                   }
                 },
-                new Date(this.props.startDateToShow).toGMTString().slice(0, 12)
+                _react3.default.createElement(
+                  _reactNative.Text,
+                  {
+                    style: {
+                      color: 'white',
+                      fontSize: 15,
+                      alignSelf: 'flex-start'
+                    },
+                    __source: {
+                      fileName: _jsxFileName,
+                      lineNumber: 270
+                    }
+                  },
+                  "Check In"
+                ),
+                _react3.default.createElement(
+                  _reactNative.Text,
+                  {
+                    style: {
+                      color: 'white',
+                      fontSize: 18
+                    },
+                    __source: {
+                      fileName: _jsxFileName,
+                      lineNumber: 271
+                    }
+                  },
+                  new Date(this.props.startDateToShow).toGMTString().slice(0, 12)
+                )
               )
             ),
             _react3.default.createElement(
@@ -64236,7 +64254,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
                 },
                 __source: {
                   fileName: _jsxFileName,
-                  lineNumber: 272
+                  lineNumber: 275
                 }
               },
               _react3.default.createElement(_reactNative.Image, {
@@ -64247,51 +64265,61 @@ __d(function (global, _require, module, exports, _dependencyMap) {
                 source: _require(_dependencyMap[15], './img/arrow_white.png'),
                 __source: {
                   fileName: _jsxFileName,
-                  lineNumber: 273
+                  lineNumber: 276
                 }
               })
             ),
             _react3.default.createElement(
-              _reactNative.View,
+              _reactNative.TouchableWithoutFeedback,
               {
-                style: {
-                  flex: 1,
-                  justifyContent: 'center',
-                  paddingRight: 10
-                },
+                onPress: this.props.onCheckOutHeaderDateClicked,
                 __source: {
                   fileName: _jsxFileName,
-                  lineNumber: 278
+                  lineNumber: 281
                 }
               },
               _react3.default.createElement(
-                _reactNative.Text,
+                _reactNative.View,
                 {
                   style: {
-                    color: 'white',
-                    fontSize: 15,
-                    alignSelf: 'flex-start'
+                    flex: 1,
+                    justifyContent: 'center',
+                    paddingRight: 10
                   },
                   __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 279
+                    lineNumber: 282
                   }
                 },
-                "Check Out"
-              ),
-              _react3.default.createElement(
-                _reactNative.Text,
-                {
-                  style: {
-                    color: 'white',
-                    fontSize: 18
+                _react3.default.createElement(
+                  _reactNative.Text,
+                  {
+                    style: {
+                      color: 'white',
+                      fontSize: 15,
+                      alignSelf: 'flex-start'
+                    },
+                    __source: {
+                      fileName: _jsxFileName,
+                      lineNumber: 283
+                    }
                   },
-                  __source: {
-                    fileName: _jsxFileName,
-                    lineNumber: 280
-                  }
-                },
-                new Date(this.props.endDateToShow).toGMTString().slice(0, 12)
+                  "Check Out"
+                ),
+                _react3.default.createElement(
+                  _reactNative.Text,
+                  {
+                    style: {
+                      color: 'white',
+                      fontSize: 18
+                    },
+                    __source: {
+                      fileName: _jsxFileName,
+                      lineNumber: 284
+                    }
+                  },
+                  new Date(this.props.endDateToShow).toGMTString().slice(0, 12)
+                )
               )
             )
           ),
@@ -64301,7 +64329,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
               style: [this.style.container, this.props.style],
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 286
+                lineNumber: 291
               }
             },
             _react3.default.createElement(_header2.default, {
@@ -64319,7 +64347,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
               onPressArrowRight: this.props.onPressArrowRight,
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 288
+                lineNumber: 293
               }
             }),
             _react3.default.createElement(
@@ -64328,7 +64356,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
                 style: this.style.monthView,
                 __source: {
                   fileName: _jsxFileName,
-                  lineNumber: 302
+                  lineNumber: 307
                 }
               },
               weeks
@@ -64343,7 +64371,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
                 },
                 __source: {
                   fileName: _jsxFileName,
-                  lineNumber: 305
+                  lineNumber: 310
                 }
               },
               _react3.default.createElement(
@@ -64352,7 +64380,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
                   onPress: this.props.onCancel,
                   __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 306
+                    lineNumber: 311
                   }
                 },
                 _react3.default.createElement(
@@ -64360,11 +64388,13 @@ __d(function (global, _require, module, exports, _dependencyMap) {
                   {
                     style: {
                       fontSize: 18,
-                      marginRight: 20
+                      marginRight: 20,
+                      color: '#8C8C8C',
+                      fontWeight: 'bold'
                     },
                     __source: {
                       fileName: _jsxFileName,
-                      lineNumber: 308
+                      lineNumber: 313
                     }
                   },
                   "Cancel"
@@ -64376,7 +64406,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
                   onPress: this.props.onDone,
                   __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 310
+                    lineNumber: 315
                   }
                 },
                 _react3.default.createElement(
@@ -64384,11 +64414,13 @@ __d(function (global, _require, module, exports, _dependencyMap) {
                   {
                     style: {
                       fontSize: 18,
-                      marginRight: 20
+                      marginRight: 20,
+                      color: '#000132',
+                      fontWeight: 'bold'
                     },
                     __source: {
                       fileName: _jsxFileName,
-                      lineNumber: 312
+                      lineNumber: 317
                     }
                   },
                   "Done"
