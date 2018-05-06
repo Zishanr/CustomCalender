@@ -63507,6 +63507,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 
             _this._onCheckInHeaderDateClicked = function () {
                 _this.setState({
+                    checkInHighlighted: true,
                     disableDate: year + '-' + MM + '-' + dd
                 });
             };
@@ -63525,9 +63526,17 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 
             _this._getHighlightedDate = function (startDate, endDate, userClicks) {
                 var hdate = {};
+                var swapvar = void 0;
+
+                if (startDate > endDate) {
+                    swapvar = startDate;
+                    startDate = endDate;
+                    endDate = swapvar;
+                }
 
                 if (userClicks === 1) {
                     for (var d = startDate; d <= endDate; d.setDate(d.getDate() + 1)) {
+                        console.log('checkindate', checkInDate);
                         hdate[[_this._getSelectedDateFormatString(d)]] = {
                             selected: true,
                             disableTouchEvent: true,
@@ -63600,7 +63609,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
                 }), _highligtedDate),
                 userSelectedDateForFirstTime: false,
                 disableDate: year + '-' + MM + '-' + dd,
-                checkInHeader: false
+                checkInHighlighted: true
             };
             return _this;
         }
@@ -63689,11 +63698,40 @@ __d(function (global, _require, module, exports, _dependencyMap) {
                                         intialDate: {
                                             intialStartDate: checkInDate,
                                             intialEndDate: secondDate
-                                        }
+                                        },
+                                        checkInHighlighted: false
                                     });
-                                } else {
-                                    userClicks = 2;
+                                } else if (_this2.state.checkInHighlighted && userClicks > 0) {
+                                    if (_this2.state.intialDate.intialStartDate > new Date(day.timestamp)) {
+                                        checkInDate = new Date(day.timestamp);
+                                        console.log("intialdate", _this2.state.intialDate);
 
+                                        _this2.setState({
+                                            intialDate: {
+                                                intialStartDate: new Date(day.timestamp),
+                                                intialEndDate: _this2.state.intialDate.intialEndDate
+                                            }
+                                        });
+
+                                        _this2._getHighlightedDate(new Date(day.timestamp), _this2.state.intialDate.intialEndDate, userClicks);
+                                    } else {
+                                        var date = new Date(day.timestamp);
+                                        var nextDate = new Date();
+                                        nextDate.setDate(date.getDate() + 1);
+                                        checkInDate = new Date(date);
+
+                                        _this2.setState({
+                                            checkInHighlighted: false,
+                                            intialDate: {
+                                                intialStartDate: date,
+                                                intialEndDate: nextDate
+                                            },
+                                            disableDate: date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate()
+                                        });
+
+                                        _this2._getHighlightedDate(date, nextDate, userClicks);
+                                    }
+                                } else {
                                     _this2.setState({
                                         intialDate: {
                                             intialStartDate: checkInDate,

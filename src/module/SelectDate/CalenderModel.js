@@ -48,8 +48,7 @@ class CalenderModel extends Component {
                 }
             },
             userSelectedDateForFirstTime: false,
-            disableDate: year + '-' + MM + '-' + dd,
-            checkInHeader : false
+            disableDate: year + '-' + MM + '-' + dd
         };
     }
 
