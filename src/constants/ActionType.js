@@ -1,0 +1,1 @@
+export const USER_SELECTED_DATE = 'user_selected_date';
